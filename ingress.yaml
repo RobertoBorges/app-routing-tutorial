@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: aks-helloworld
+  annotations:
+    kubernetes.azure.com/tls-cert-keyvault-uri: https://nonprodborgeskv.vault.azure.net/certificates/nonprodborgescom
+spec:
+  ingressClassName: webapprouting.kubernetes.azure.com
+  rules:
+  - host: helloworld.nonprodborges.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: aks-helloworld
+            port:
+              number: 80
+  tls:
+  - hosts:
+    - helloworld.nonprodborges.com
+    secretName: keyvault-aks-helloworld
